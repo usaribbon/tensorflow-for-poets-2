@@ -71,11 +71,16 @@ if __name__ == "__main__":
   file_name = "tf_files/flower_photos/daisy/3475870145_685a19116d.jpg"
   model_file = "tf_files/retrained_graph.pb"
   label_file = "tf_files/retrained_labels.txt"
-  input_height = 224
-  input_width = 224
-  input_mean = 128
-  input_std = 128
-  input_layer = "input"
+  input_height = 299
+  input_width = 299
+  input_mean = 0
+  input_std = 255
+  input_layer = "Mul"
+  #input_height = 224
+  #input_width = 224
+  #input_mean = 128
+  #input_std = 128
+  #input_layer = "input"
   output_layer = "final_result"
 
   parser = argparse.ArgumentParser()
