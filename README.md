@@ -1,10 +1,20 @@
 # Overview
 tensorflowが提供している、画像認識モデルのサンプルを使って  
 かぶとの折り紙が何番目の手順かを当てます。
-* See original README -> README.md.org
+
+# ファイルの説明
+よく使うスクリプトと画像は以下です。
+```
+.
+├── scripts
+│   ├── label_image.py -> 順番予測スクリプト
+│   └── retrain.py     -> モデル学習スクリプト
+├── tf_files
+│   └── kabuto         -> かぶとの画像
+```
 
 # 実行
-iLectのコンソールで実行してください
+iLectのコンソールで実行してください。
 
 1. iLect上の任意のディレクトリにこのリポジトリをcloneします
 ```
@@ -46,3 +56,6 @@ Evaluation time (1-image): 1.530s
 
 # 参考URL
 * https://towardsdatascience.com/training-inception-with-tensorflow-on-custom-images-using-cpu-8ecd91595f26
+
+# そのた
+* See original README -> README.md.org
