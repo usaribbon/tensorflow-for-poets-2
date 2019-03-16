@@ -14,20 +14,20 @@ tensorflowが提供している、画像認識モデルのサンプルを使っ�
 ```
 
 # 実行
-iLectのコンソールで実行してください。
+iLectのコンソールで実行してください。  
 kabuto.ipynbに、以下と同様の手順がまとまっています。
 
-1. iLect上の任意のディレクトリにこのリポジトリをcloneします
+#### 1. iLect上の任意のディレクトリにこのリポジトリをcloneします
 ```
 git clone https://github.com/usaribbon/tensorflow-for-poets-2.git
 ```
 
-2.iLectでかぶとの折り紙の画像を学習させます
+#### 2.iLectでかぶとの折り紙の画像を学習させます
 ```
 python3 scripts/retrain.py --output_graph=tf_files/retrained_graph.pb --output_labels=tf_files/retrained_labels.txt --image_dir=tf_files/kabuto
 ```
 
-3.学習したモデルで折り紙の手順番号を予測し、次のステップ動画を再生します
+#### 3.学習したモデルで折り紙の手順番号を予測し、次のステップ動画を再生します  
 iLectでは動画再生できないため、OpenCV対応の環境で以下のスクリプト実行してください。
 例）08ステップ目の画像
 ```
