@@ -21,6 +21,10 @@ import argparse
 import sys
 import time
 
+# play next step movie, .mp4
+import os
+import cv2
+
 import numpy as np
 import tensorflow as tf
 
@@ -76,12 +80,12 @@ if __name__ == "__main__":
   input_mean = 0
   input_std = 255
   input_layer = "Mul"
+  output_layer = "final_result"
   #input_height = 224
   #input_width = 224
   #input_mean = 128
   #input_std = 128
   #input_layer = "input"
-  output_layer = "final_result"
 
   parser = argparse.ArgumentParser()
   parser.add_argument("--image", help="image to be processed")
@@ -140,3 +144,31 @@ if __name__ == "__main__":
   template = "{} (score={:0.5f})"
   for i in top_k:
     print(template.format(labels[i], results[i]))
+
+  # show next stop movie
+  # read mp4
+  file_name = os.getcwd() + u"/tf_files/video/kabuto_"+labels[top_k[0]]+u".mp4"
+  if os.path.exists(file_name):
+    try:
+      delay = 1
+      window_name = 'frame'
+      cap = cv2.VideoCapture(file_name)
+
+      if not cap.isOpened():
+          sys.exit()
+
+      while True:
+          ret, frame = cap.read()
+          if ret:
+              cv2.imshow(window_name, frame)
+              if cv2.waitKey(delay) & 0xFF == ord('q'):
+                  break
+          else:
+              cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+
+      cv2.destroyWindow(window_name)
+    except:
+      print("\n%s Error" % file_name)
+  else:
+    print("\n%s Not Found" % file_name)
+    
