@@ -1,0 +1,24 @@
+$ python3 scripts/label_image.py --image tf_files/answer/08_answer.jpeg
+2019-03-15 12:10:24.580165: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+2019-03-15 12:10:24.686310: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:892] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-03-15 12:10:24.686605: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Found device 0 with properties:
+name: GRID K520 major: 3 minor: 0 memoryClockRate(GHz): 0.797
+pciBusID: 0000:00:03.0
+totalMemory: 3.94GiB freeMemory: 3.90GiB
+2019-03-15 12:10:24.686658: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1120] Creating TensorFlow device (/device:GPU:0) -> (device: 0, name: GRID K520, pci bus id: 0000:00:03.0, compute capability: 3.0)
+2019-03-15 12:10:24.982714: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1120] Creating TensorFlow device (/device:GPU:0) -> (device: 0, name: GRID K520, pci bus id: 0000:00:03.0, compute capability: 3.0)
+2019-03-15 12:10:25.365768: W tensorflow/core/framework/op_def_util.cc:334] Op BatchNormWithGlobalNormalization is deprecated. It will cease to work in GraphDef version 9. Use tf.nn.batch_normalization().
+
+Evaluation time (1-image): 1.530s
+
+02 (score=0.66252)
+01 (score=0.18554)
+09 (score=0.08829)
+10 (score=0.02805)
+03 (score=0.01287)
+
+考察：
+inception_v3にかぶとの折り紙画像を学習させた。
+一度の学習で高い精度のモデルができた。
+今後の精度向上案としては、画像の左右反転、上下反転でデータを増やす。
+imagemagicというコマンドラインツールなどで、既存の画像を加工できる。
