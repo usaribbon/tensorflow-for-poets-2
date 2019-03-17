@@ -1,13 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 # イメージが保管されているフォルダに保存し、実行してください。
+# 指定された横pixelsで、out_が付与された名称で、ファイルが追加されます。
+
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-
 
 import os
 import glob
@@ -40,10 +35,3 @@ for f in files:
         newfname = imgdir + '/out_' + str(wsize) + 'x' + str(hsize) + '_' + imgname
         print(newfname)
         img_resize.save(newfname)
-
-
-# In[ ]:
-
-
-
-
