@@ -61,9 +61,9 @@ def load_images(file_img_list):
 # main
 
 # 入力画像データの入っているフォルダパス
-dir_in='C:/Users/chekolart/Desktop/origami_dataset/set_010-014'
+dir_in='C:/Users/chekolart/Desktop/origami_dataset/all'
 # 出力画像データを置くフォルダパス
-dir_out='C:/Users/chekolart/Desktop/origami_dataset/set_010-014_renamed'
+dir_out='C:/Users/chekolart/Desktop/origami_dataset/chekolart'
 # メンバーのID
 member_id='A'
 # 扱う画像ファイルの形式
