@@ -12,7 +12,7 @@
 ![](./img/origami_img4.png)
 
 ### 5. 画像形式，画像サイズ
-形式: JPG, サイズ: 1280x720
+形式: JPG, サイズ: 1280x720, アプリ: OpenCamera
 
 
 ```python
