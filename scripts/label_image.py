@@ -77,8 +77,8 @@ if __name__ == "__main__":
   label_file = "tf_files/retrained_labels.txt"
   input_height = 299
   input_width = 299
-  input_mean = 0
-  input_std = 255
+  input_mean = 128    # おそらくここは255ではなく128だと思われます，
+  input_std = 128   # おそらくここも255ではなく128だと思われます，
   input_layer = "Mul"
   output_layer = "final_result"
   #input_height = 224
