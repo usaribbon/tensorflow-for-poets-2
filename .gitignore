@@ -7,3 +7,5 @@ local.properties
 android.iml
 .gradle/
 android/assets/*
+/retrain_results/tensorboard_logs
+/retrain_results/intermediate_graphs
