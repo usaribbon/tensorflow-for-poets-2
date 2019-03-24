@@ -17,93 +17,184 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import argparse
-import sys
 import time
 
 import numpy as np
 import tensorflow as tf
+import sys
+
+import cv2
 
 def load_graph(model_file):
-  graph = tf.Graph()
-  graph_def = tf.GraphDef()
+    graph = tf.Graph()
+    graph_def = tf.GraphDef()
 
-  with open(model_file, "rb") as f:
-    graph_def.ParseFromString(f.read())
-  with graph.as_default():
-    tf.import_graph_def(graph_def)
+    with open(model_file, "rb") as f:
+        graph_def.ParseFromString(f.read())
+    with graph.as_default():
+        tf.import_graph_def(graph_def)
 
-  return graph
+    return graph
 
-def read_tensor_from_image_file(file_name, input_height=299, input_width=299,
-				input_mean=0, input_std=255):
-  input_name = "file_reader"
-  output_name = "normalized"
-  file_reader = tf.read_file(file_name, input_name)
-  if file_name.endswith(".png"):
-    image_reader = tf.image.decode_png(file_reader, channels = 3,
-                                       name='png_reader')
-  elif file_name.endswith(".gif"):
-    image_reader = tf.squeeze(tf.image.decode_gif(file_reader,
-                                                  name='gif_reader'))
-  elif file_name.endswith(".bmp"):
-    image_reader = tf.image.decode_bmp(file_reader, name='bmp_reader')
-  else:
-    image_reader = tf.image.decode_jpeg(file_reader, channels = 3,
-                                        name='jpeg_reader')
-  float_caster = tf.cast(image_reader, tf.float32)
-  dims_expander = tf.expand_dims(float_caster, 0);
-  resized = tf.image.resize_bilinear(dims_expander, [input_height, input_width])
-  normalized = tf.divide(tf.subtract(resized, [input_mean]), [input_std])
-  sess = tf.Session()
-  result = sess.run(normalized)
+# def read_tensor_from_image_file(file_name, input_height=299, input_width=299, input_mean=0, input_std=255):
+#     input_name = "file_reader"
+#     output_name = "normalized"
+#     file_reader = tf.read_file(file_name, input_name)
+#     if file_name.endswith(".png"):
+#         image_reader = tf.image.decode_png(file_reader, channels = 3, name='png_reader')
+#     elif file_name.endswith(".gif"):
+#         image_reader = tf.squeeze(tf.image.decode_gif(file_reader, name='gif_reader'))
+#     elif file_name.endswith(".bmp"):
+#         image_reader = tf.image.decode_bmp(file_reader, name='bmp_reader')
+#     else:
+#         image_reader = tf.image.decode_jpeg(file_reader, channels = 3, name='jpeg_reader')
+#     float_caster = tf.cast(image_reader, tf.float32)
+#     dims_expander = tf.expand_dims(float_caster, 0)
+#     resized = tf.image.resize_bilinear(dims_expander, [input_height, input_width])
+#     normalized = tf.divide(tf.subtract(resized, [input_mean]), [input_std])
+#     sess = tf.Session()
+#     result = sess.run(normalized)
 
-  return result
+#     return result
 
 def load_labels(label_file):
-  label = []
-  proto_as_ascii_lines = tf.gfile.GFile(label_file).readlines()
-  for l in proto_as_ascii_lines:
-    label.append(l.rstrip())
-  return label
+    label = []
+    proto_as_ascii_lines = tf.gfile.GFile(label_file).readlines()
+    for l in proto_as_ascii_lines:
+        label.append(l.rstrip())
+    return label
 
-if __name__ == "__main__":
+#
+# 引数設定
+#
 
-  # settings for inception v3
-  file_name = "tf_files/flower_photos/daisy/3475870145_685a19116d.jpg"
-  model_file = "tf_files/retrained_graph.pb"
-  label_file = "tf_files/retrained_labels.txt"
-  input_height = 299
-  input_width = 299
-  input_mean = 128
-  input_std = 128
-  input_layer = "input"
-  output_layer = "final_result"
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--graph", help="graph/model to be executed")
+parser.add_argument("--labels", help="name of file containing labels")
+parser.add_argument("--dir_video", help="name of directory containing video files")
+args = parser.parse_args()
+model_file = args.graph
+label_file = args.labels
+dir_video = args.dir_video
 
-  graph = load_graph(model_file)
-  t = read_tensor_from_image_file(file_name,
-                                  input_height=input_height,
-                                  input_width=input_width,
-                                  input_mean=input_mean,
-                                  input_std=input_std)
+#
+# ネットワーク設定
+#
 
-  input_name = "import/" + input_layer
-  output_name = "import/" + output_layer
-  input_operation = graph.get_operation_by_name(input_name);
-  output_operation = graph.get_operation_by_name(output_name);
+input_height = 299
+input_width = 299
+input_mean = 128
+input_std = 128
+input_layer = "Mul"
+output_layer = "final_result"
 
-  with tf.Session(graph=graph) as sess:
-    start = time.time()
-    results = sess.run(output_operation.outputs[0],
-                      {input_operation.outputs[0]: t})
-    end=time.time()
-  results = np.squeeze(results)
+graph = load_graph(model_file)
+# t = read_tensor_from_image_file(file_name,
+#                                 input_height=input_height,
+#                                 input_width=input_width,
+#                                 input_mean=input_mean,
+#                                 input_std=input_std)
 
-  top_k = results.argsort()[-5:][::-1]
-  labels = load_labels(label_file)
+input_name = "import/" + input_layer
+output_name = "import/" + output_layer
+input_operation = graph.get_operation_by_name(input_name)
+output_operation = graph.get_operation_by_name(output_name)
 
-  print('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
-  template = "{} (score={:0.5f})"
-  for i in top_k:
-    print(template.format(labels[i], results[i]))
 
+#
+#  ここからはデモ用プログラム
+#
+
+sess=tf.Session(graph=graph)
+
+# カメラの初期設定
+cam_v_cap = cv2.VideoCapture(0)
+ret, cam_frame = cam_v_cap.read()
+h_frame = cam_frame.shape[0] # カメラ画像の立幅の取得
+w_frame = cam_frame.shape[1] # カメラ画像の横幅の取得
+
+while True:
+    # カメラフレームの取得
+    ret, cam_frame = cam_v_cap.read()
+    # カメラフレームに対して円を真ん中に描画
+    center = (cam_frame.shape[1]//2, cam_frame.shape[0]//2)
+    circle_radius = int(cam_frame.shape[0]*0.35)
+    circle_clr = (0,0,255)
+    drawn_cam_frame=cam_frame.copy()
+    drawn_cam_frame = cv2.circle(drawn_cam_frame, center, circle_radius, circle_clr, thickness=5, lineType=cv2.LINE_AA)
+    # 説明テキストの描画
+    font = cv2.FONT_HERSHEY_PLAIN
+    text = '(q): Quit, (s): Shoot'
+    white = (255,255,255)
+    drawn_cam_frame=cv2.putText(drawn_cam_frame,text,(int(w_frame*0.05),int(h_frame*0.05)),font,1.5,white)
+    # カメラフレームの描画
+    cv2.imshow('DEMO', drawn_cam_frame)
+
+    # キー入力によるオプションの選択
+    key = cv2.waitKey(1)
+    if key & 0xFF == ord('q'): # 終了
+        break
+    if key & 0xFF == ord('s'): # 撮影し折り紙の状態を識別
+        # 指定範囲の画像をクロップし，その画像に対してラベル付けする
+        crop_size=int(h_frame*0.7)
+        y_start=(h_frame-crop_size)//2
+        y_end=y_start+crop_size
+        x_start=(w_frame-crop_size)//2
+        x_end=x_start+crop_size
+        cropped_frame=cam_frame[y_start:y_end,x_start:x_end]
+        cropped_frame=cv2.resize(cropped_frame, (input_width, input_height))
+        #_=cv2.imwrite('tmp.png', cropped_frame)
+        cropped_frame=(cropped_frame-input_mean)/input_std
+        # (h,w,c)->(batch_size=1,h,w,c)
+        t=np.expand_dims(cropped_frame, axis=0)
+        # ネットワークの順伝播
+        start = time.time()
+        results = sess.run(output_operation.outputs[0], {input_operation.outputs[0]: t})
+        end=time.time()
+        results = np.squeeze(results)
+        top_k = results.argsort()[:][::-1]
+        labels = load_labels(label_file)
+
+        print('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
+        template = "{} (score={:0.5f})"
+        for i in top_k:
+            print(template.format(labels[i], results[i]))
+
+        # 再生する動画の決定
+        file_video=dir_video+'/kabuto_05.mp4'
+        # 動画再生
+        inst_v_cap = cv2.VideoCapture(file_video)
+        loop_end = False
+        while not loop_end:
+            # 動画フレームの取得
+            ret, video_frame = inst_v_cap.read()
+            if ret:
+                # 動画フレームのリサイズ
+                video_frame = cv2.resize(video_frame, (w_frame, h_frame))
+                font = cv2.FONT_HERSHEY_PLAIN
+                text = '(q): Quit, (r): Repeat'
+                white = (255,255,255)
+                cam_frame=cv2.putText(video_frame,text,(int(w_frame*0.05),int(h_frame*0.05)),font, 1.5,white)
+                # カメラフレームの描画
+                cv2.imshow('DEMO', video_frame)
+                # 再生速度調整のため，毎フレーム10ms待つ
+                key = cv2.waitKey(10)
+            else:
+                while True:
+                    key = cv2.waitKey(1)
+                    if key & 0xFF == ord('q'): # 終了
+                        loop_end=True
+                        break
+                    if key & 0xFF == ord('r'): # もう一度再生
+                        inst_v_cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+                        break
+        inst_v_cap.release()
+
+print('DEMO FIN')
+
+cam_v_cap.release()
+cv2.destroyWindow('DEMO')
+
+sess.close()
+#cv2.destroyAllWindows()

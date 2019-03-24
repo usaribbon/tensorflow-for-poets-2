@@ -56,7 +56,7 @@ def read_tensor_from_image_file(file_name, input_height=299, input_width=299,
     image_reader = tf.image.decode_jpeg(file_reader, channels = 3,
                                         name='jpeg_reader')
   float_caster = tf.cast(image_reader, tf.float32)
-  dims_expander = tf.expand_dims(float_caster, 0);
+  dims_expander = tf.expand_dims(float_caster, 0)
   resized = tf.image.resize_bilinear(dims_expander, [input_height, input_width])
   normalized = tf.divide(tf.subtract(resized, [input_mean]), [input_std])
   sess = tf.Session()
@@ -75,8 +75,9 @@ if __name__ == "__main__":
   file_name = "tf_files/flower_photos/daisy/3475870145_685a19116d.jpg"
   model_file = "tf_files/retrained_graph.pb"
   label_file = "tf_files/retrained_labels.txt"
-  input_mean = 128 # Ç®ÇªÇÁÇ≠Ç±Ç±ÇÕ255Ç≈ÇÕÇ»Ç≠128ÇæÇ∆évÇÌÇÍÇ‹Ç∑ÅC
-  input_std = 128 # Ç®ÇªÇÁÇ≠Ç±Ç±ÇÕ255Ç≈ÇÕÇ»Ç≠128ÇæÇ∆évÇÌÇÍÇ‹Ç∑ÅC
+  input_mean = 128Ôºé
+  input_std = 128
+  input_layer = "Mul"
   output_layer = "final_result"
   #input_height = 224
   #input_width = 224
