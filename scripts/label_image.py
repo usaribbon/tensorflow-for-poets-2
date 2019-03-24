@@ -75,11 +75,8 @@ if __name__ == "__main__":
   file_name = "tf_files/flower_photos/daisy/3475870145_685a19116d.jpg"
   model_file = "tf_files/retrained_graph.pb"
   label_file = "tf_files/retrained_labels.txt"
-  input_height = 299
-  input_width = 299
-  input_mean = 128    # ãŠãã‚‰ãã“ã“ã¯255ã§ã¯ãªã128ã ã¨æ€ã‚ã‚Œã¾ã™ï¼Œ
-  input_std = 128   # ãŠãã‚‰ãã“ã“ã‚‚255ã§ã¯ãªã128ã ã¨æ€ã‚ã‚Œã¾ã™ï¼Œ
-  input_layer = "Mul"
+  input_mean = 128 # ‚¨‚»‚ç‚­‚±‚±‚Í255‚Å‚Í‚È‚­128‚¾‚Æv‚í‚ê‚Ü‚·C
+  input_std = 128 # ‚¨‚»‚ç‚­‚±‚±‚Í255‚Å‚Í‚È‚­128‚¾‚Æv‚í‚ê‚Ü‚·C
   output_layer = "final_result"
   #input_height = 224
   #input_width = 224
