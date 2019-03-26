@@ -22,6 +22,7 @@ import time
 import numpy as np
 import tensorflow as tf
 import sys
+import os
 
 import cv2
 
@@ -162,7 +163,19 @@ while True:
             print(template.format(labels[i], results[i]))
 
         # 再生する動画の決定
-        file_video=dir_video+'/kabuto_05.mp4'
+        best_label = labels[top_k[0]]
+        video_names = os.listdir(dir_video)
+        file_video = dir_video+'/dummy.mp4'
+        for video_name in video_names:
+            if video_name.startswith(best_label):
+                if best_label.startswith('step06'):
+                    if 'step07' in labels:
+                        file_video=dir_video+'/'+'step06_to_step07.mp4'
+                    else:
+                        file_video=dir_video+'/'+'step06_to_step08.mp4'
+                else:
+                    file_video=dir_video+'/'+video_name
+
         # 動画再生
         inst_v_cap = cv2.VideoCapture(file_video)
         loop_end = False
@@ -175,11 +188,12 @@ while True:
                 font = cv2.FONT_HERSHEY_PLAIN
                 text = '(q): Quit, (r): Repeat'
                 white = (255,255,255)
-                cam_frame=cv2.putText(video_frame,text,(int(w_frame*0.05),int(h_frame*0.05)),font, 1.5,white)
+                video_frame=cv2.rectangle(video_frame, (0, 0), (w_frame-1, int(h_frame*0.1)), (0, 0, 0), -1)
+                video_frame=cv2.putText(video_frame,text,(int(w_frame*0.05),int(h_frame*0.05)),font, 1.5,white)
                 # カメラフレームの描画
                 cv2.imshow('DEMO', video_frame)
                 # 再生速度調整のため，毎フレーム10ms待つ
-                key = cv2.waitKey(10)
+                key = cv2.waitKey(20)
             else:
                 while True:
                     key = cv2.waitKey(1)
