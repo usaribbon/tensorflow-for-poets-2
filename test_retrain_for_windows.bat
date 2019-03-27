@@ -13,7 +13,7 @@ python scripts/retrain.py ^
     --summaries_dir=%output_dir%/tensorboard_logs ^
     --random_crop=8 ^
     --intermediate_store_frequency=100 ^
-    --how_many_training_steps=1500 ^
+    --how_many_training_steps=3000 ^
     --random_brightness=12 ^
     --random_scale=8 ^
     --flip_left_right ^
