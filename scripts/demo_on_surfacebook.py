@@ -168,13 +168,7 @@ while True:
         file_video = dir_video+'/dummy.mp4'
         for video_name in video_names:
             if video_name.startswith(best_label):
-                if best_label.startswith('step06'):
-                    if 'step07' in labels:
-                        file_video=dir_video+'/'+'step06_to_step07.mp4'
-                    else:
-                        file_video=dir_video+'/'+'step06_to_step08.mp4'
-                else:
-                    file_video=dir_video+'/'+video_name
+                file_video=dir_video+'/'+video_name
 
         # 動画再生
         inst_v_cap = cv2.VideoCapture(file_video)

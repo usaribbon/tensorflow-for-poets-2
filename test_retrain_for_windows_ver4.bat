@@ -1,12 +1,12 @@
 @echo off
 
-set output_dir=retrain_results_ver3
+set output_dir=retrain_results_ver4
 if not exist %output_dir%\ (
     md %output_dir%
 )
 
 python scripts/retrain.py ^
-    --image_dir=C:/Users/chekolart/Desktop/kabuto_dataset/500x500_ver3 ^
+    --image_dir=dataset/500x500_ver4 ^
     --output_graph=%output_dir%/graph.pb ^
     --output_labels=%output_dir%/labels.txt ^
     --intermediate_output_graphs_dir=%output_dir%/intermediate_graphs/ ^
