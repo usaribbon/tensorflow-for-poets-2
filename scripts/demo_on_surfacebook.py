@@ -74,10 +74,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--graph", help="graph/model to be executed")
 parser.add_argument("--labels", help="name of file containing labels")
 parser.add_argument("--dir_video", help="name of directory containing video files")
+parser.add_argument("--f_img_steps", help="where image describing steps is")
 args = parser.parse_args()
 model_file = args.graph
 label_file = args.labels
 dir_video = args.dir_video
+f_img_steps = args.f_img_steps
 
 #
 # ネットワーク設定
@@ -115,6 +117,10 @@ ret, cam_frame = cam_v_cap.read()
 h_frame = cam_frame.shape[0] # カメラ画像の立幅の取得
 w_frame = cam_frame.shape[1] # カメラ画像の横幅の取得
 
+# ガイド画像
+img_steps=cv2.imread(f_img_steps)
+img_steps=cv2.resize(img_steps, (w_frame, h_frame))
+
 while True:
     # カメラフレームの取得
     ret, cam_frame = cam_v_cap.read()
@@ -130,7 +136,7 @@ while True:
     white = (255,255,255)
     drawn_cam_frame=cv2.putText(drawn_cam_frame,text,(int(w_frame*0.05),int(h_frame*0.05)),font,1.5,white)
     # カメラフレームの描画
-    cv2.imshow('DEMO', drawn_cam_frame)
+    cv2.imshow('DEMO', cv2.hconcat([drawn_cam_frame, img_steps]))
 
     # キー入力によるオプションの選択
     key = cv2.waitKey(1)
@@ -170,6 +176,34 @@ while True:
             if video_name.startswith(best_label):
                 file_video=dir_video+'/'+video_name
 
+        # 現在の進捗度を示すガイド画像の生成
+        drawn_img_steps=img_steps.copy()
+        font = cv2.FONT_HERSHEY_PLAIN
+        text = 'YOU\'RE HERE'
+        red = (0,0,255)
+        def get_loc_to_put_text(label_name):
+            if   label_name == 'step00':
+                return (int(w_frame*0.02),int(h_frame*0.435))
+            elif label_name == 'step01':
+                return (int(w_frame*0.26),int(h_frame*0.435))
+            elif label_name == 'step02':
+                return (int(w_frame*0.51),int(h_frame*0.435))
+            elif label_name == 'step03':
+                return (int(w_frame*0.76),int(h_frame*0.435))
+            elif label_name == 'step04':
+                return (int(w_frame*0.02),int(h_frame*0.93))
+            elif label_name == 'step05':
+                return (int(w_frame*0.26),int(h_frame*0.93))
+            elif label_name == 'step06':
+                return (int(w_frame*0.51),int(h_frame*0.93))
+            elif label_name == 'step07':
+                return (int(w_frame*0.76),int(h_frame*0.93))
+            else:
+                return None
+        text_loc = get_loc_to_put_text(best_label)
+        if text_loc is not None:
+            drawn_img_steps=cv2.putText(drawn_img_steps,text,text_loc,font, 1.3,red,2)
+        
         # 動画再生
         inst_v_cap = cv2.VideoCapture(file_video)
         loop_end = False
@@ -185,7 +219,7 @@ while True:
                 video_frame=cv2.rectangle(video_frame, (0, 0), (w_frame-1, int(h_frame*0.1)), (0, 0, 0), -1)
                 video_frame=cv2.putText(video_frame,text,(int(w_frame*0.05),int(h_frame*0.05)),font, 1.5,white)
                 # カメラフレームの描画
-                cv2.imshow('DEMO', video_frame)
+                cv2.imshow('DEMO', cv2.hconcat([video_frame, drawn_img_steps]))
                 # 再生速度調整のため，毎フレーム10ms待つ
                 key = cv2.waitKey(20)
             else:
