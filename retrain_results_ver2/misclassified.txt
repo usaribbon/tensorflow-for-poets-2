@@ -1,0 +1,21 @@
+INFO:tensorflow:=== MISCLASSIFIED TEST IMAGES ===
+INFO:tensorflow:                        dataset/500x500_ver2\step04\A_011_04_D_+05.jpg  step00
+INFO:tensorflow:                        dataset/500x500_ver2\step04\A_026_04_D_-05.jpg  step05
+INFO:tensorflow:                        dataset/500x500_ver2\step04\A_011_04_D_+05.jpg  step00
+INFO:tensorflow:                        dataset/500x500_ver2\step04\A_026_04_D_-05.jpg  step05
+INFO:tensorflow:                        dataset/500x500_ver2\step05\A_008_05_R_+00.jpg  step07
+INFO:tensorflow:                        dataset/500x500_ver2\step05\A_034_05_D_+05.jpg  step06
+INFO:tensorflow:                        dataset/500x500_ver2\step05\A_036_05_R_+05.jpg  step06
+INFO:tensorflow:                        dataset/500x500_ver2\step05\A_039_05_D_+05.jpg  step06
+INFO:tensorflow:                        dataset/500x500_ver2\step05\A_008_05_R_+00.jpg  step07
+INFO:tensorflow:                        dataset/500x500_ver2\step05\A_034_05_D_+05.jpg  step06
+INFO:tensorflow:                        dataset/500x500_ver2\step05\A_036_05_R_+05.jpg  step06
+INFO:tensorflow:                        dataset/500x500_ver2\step05\A_039_05_D_+05.jpg  step06
+INFO:tensorflow:                        dataset/500x500_ver2\step06\A_004_06_L_+05.jpg  step07
+INFO:tensorflow:                        dataset/500x500_ver2\step06\A_007_06_L_+00.jpg  step07
+INFO:tensorflow:                        dataset/500x500_ver2\step06\A_004_06_L_+05.jpg  step07
+INFO:tensorflow:                        dataset/500x500_ver2\step06\A_007_06_L_+00.jpg  step07
+INFO:tensorflow:                        dataset/500x500_ver2\step07\A_026_07_D_+05.jpg  step08
+INFO:tensorflow:                        dataset/500x500_ver2\step07\A_026_07_D_+05.jpg  step08
+INFO:tensorflow:                        dataset/500x500_ver2\step08\A_001_08_L_+00.jpg  step07
+INFO:tensorflow:                        dataset/500x500_ver2\step08\A_001_08_L_+00.jpg  step07
