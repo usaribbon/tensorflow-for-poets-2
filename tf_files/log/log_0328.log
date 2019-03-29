@@ -1,0 +1,10 @@
+.pb -> .tfliteの変換時，nput_arraysとoutput_arraysの調整が必要
+モデルによってパラメータの値は異なる
+tensorboardでグラフを可視化するとinput/outputで書くべきことがわかる
+以下が現状のパラメータ
+bazel-bin/tensorflow/lite/toco/toco     --output_file=tensorflow-for-poets-2/retrain_results/graph.tflite     --input_file=tensorflow-for-poets-2/retrain_results/graph.pb     --input_arrays=DecodeJpeg    --output_arrays=final_result 
+参考：http://blog.gclue.com/?p=836
+１．.pbをandroidアプリで使うには，.tfliteに変換する必要がある
+２．変換のためのパラメータをいくつか設定する必要がある
+３．よさそうなパラメータでモデル変換できた
+４．エミュレータでアプリを起動すると，モデルの読み込みで落ちる
